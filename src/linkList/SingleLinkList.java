@@ -48,7 +48,7 @@ public class SingleLinkList<T>{
      * @param i 元素位置
      * @return Node
      */
-    public T getNode(int i){
+    public Node<T> getNode(int i){
         if(i< 0 || i >= size){
             throw new RuntimeException("下标越界");
         }
@@ -56,7 +56,7 @@ public class SingleLinkList<T>{
         for(int j=0;j<i;j++){
             node = node.getNext();
         }
-        return node.data;
+        return node;
     }
 
     /**
@@ -90,11 +90,7 @@ public class SingleLinkList<T>{
             return header.data;
         }else{
             int count = 0;
-            Node<T> preNode = header;
-            while(count != i-1){
-                preNode = preNode.next;
-                count ++;
-            }
+            Node<T> preNode = this.getNode(i -1 );
             Node<T> delNode = preNode.next;
             preNode.next = delNode.next;
             delNode.next = null;
@@ -123,15 +119,63 @@ public class SingleLinkList<T>{
             header = node;
         }else{
             int count = 0;
-            Node<T> currentNode = header;
-            while(count != i-1){
-                currentNode = currentNode.next;
-                count ++;
-            }
-            node.next = currentNode.next;
-            currentNode.next = node;
+            Node<T> preNode = getNode(i -1);
+            node.next = preNode.next;
+            preNode.next = node;
         }
         size++;
+    }
+
+    /**
+     * 翻转链表
+     */
+    public void inverse(){
+        if(size == 0 || size == 1){
+            return;
+        }
+        this.tail = header;
+        Node<T> preNode = null;
+        Node<T> currentNode = header;
+        Node<T> nextNode = null;
+        while(currentNode != null) {
+            nextNode = currentNode.next;
+            currentNode.next = preNode;
+            preNode = currentNode;
+            currentNode = nextNode;
+        }
+        this.header = preNode;
+    }
+
+    public boolean palindromic(){
+        if(size == 0 || size == 1){
+            return true;
+        }
+        Node<T> fast = header;
+        Node<T> slow = header;
+        Node<T> preNode = null;
+        Node<T> next = null;
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            next = slow.next;
+            slow.next = preNode;
+            preNode = slow;
+            slow = next;
+        }
+        if(size % 2 != 0){
+            slow = slow.next;
+        }
+        boolean flag = true;
+        while(slow != null){
+            T a = slow.data;
+            T b = preNode.data;
+            if(!a.equals(b)){
+                flag = false;
+                break;
+            }
+            slow = slow.next;
+            preNode = preNode.next;
+        }
+        return flag;
     }
 
     @Override

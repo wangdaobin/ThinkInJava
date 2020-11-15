@@ -26,5 +26,13 @@ public class LinkListTest {
 
         System.out.println(stringSingleLinkList);
 
+        stringSingleLinkList.inverse();
+
+        System.out.println(stringSingleLinkList);
+        SingleLinkList<String> stringSingleLinkList1 = new SingleLinkList<>();
+        stringSingleLinkList1.add("1");
+        stringSingleLinkList1.add("2");
+        boolean flag = stringSingleLinkList1.palindromic();
+        System.out.println(flag);
     }
 }
